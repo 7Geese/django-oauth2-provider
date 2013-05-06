@@ -11,14 +11,20 @@ CLIENT_TYPES = (
 
 RESPONSE_TYPE_CHOICES = getattr(settings, 'OAUTH_RESPONSE_TYPE_CHOICES', ("code", "token"))
 
-READ = 1 << 1
-WRITE = 1 << 2
-READ_WRITE = READ | WRITE
+OBJECTIVE = 1 << 1
+FEED = 1 << 2
+RECOGNITION = 1 << 3
+NETWORK_POST = 1 << 4
+FEEDBACK = 1 << 5
+ALL = 1 << 32
 
 DEFAULT_SCOPES = (
-    (READ, 'read'),
-    (WRITE, 'write'),
-    (READ_WRITE, 'read+write'),
+    (OBJECTIVE, 'objective'),
+    (FEED, 'feed'),
+    (RECOGNITION, 'recognition'),
+    (NETWORK_POST, 'network post'),
+    (FEEDBACK, 'feedback'),
+    (ALL, 'all'),
 )
 
 SCOPES = getattr(settings, 'OAUTH_SCOPES', DEFAULT_SCOPES)
