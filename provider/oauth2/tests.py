@@ -423,7 +423,7 @@ class ScopeTest(TestCase):
         names = scope.names(constants.ALL)
         names.sort()
 
-        self.assertEqual('all feed feedback network post objective recognition', ' '.join(names))
+        self.assertEqual('all feed feedback network_post objective recognition', ' '.join(names))
 
     def test_get_scope_ints(self):
         self.assertEqual(constants.OBJECTIVE, scope.to_int('objective'))
@@ -439,4 +439,4 @@ class ScopeTest(TestCase):
         names = scope.names(constants.ALL)
         names.sort()
 
-        self.assertEqual('all feed feedback network post objective recognition', ' '.join(names))
+        self.assertEqual('all feed feedback network_post objective recognition', ' '.join(names))
