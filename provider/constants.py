@@ -18,7 +18,7 @@ FEED = 1 << 2
 RECOGNITION = 1 << 3
 NETWORK_POST = 1 << 4
 FEEDBACK = 1 << 5
-ALL = 1 << 32
+ALL = 1 << 31
 
 DEFAULT_SCOPES = (
     (OBJECTIVE, 'objective'),
