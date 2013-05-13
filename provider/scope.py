@@ -56,7 +56,9 @@ def check(wants, has):
         True
 
     """
-    if (wants & has == 0) and (has & ALL == 0):
+    if wants & has == 0:
+        return False
+    if wants & has < wants:
         return False
     return True
 

@@ -91,7 +91,7 @@ class ScopeMixin(object):
         defined scope in :attr:`provider.constants.SCOPES`.
 
         """
-        default = 0
+        default = SCOPES[0][0]
 
         flags = self.cleaned_data.get('scope', [])
 

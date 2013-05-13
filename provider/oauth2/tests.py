@@ -285,7 +285,7 @@ class AccessTokenTest(BaseOAuth2TestCase):
             'client_id': self.get_client().client_id,
             'client_secret': self.get_client().client_secret,
             'code': code,
-            'scope': 'feed recognition'})
+            'scope': 'feed'})
 
         self.assertEqual(400, response.status_code)
         self.assertEqual('invalid_scope', json.loads(response.content)['error'])
