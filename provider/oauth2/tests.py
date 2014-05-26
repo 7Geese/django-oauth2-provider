@@ -336,7 +336,7 @@ class AccessTokenTest(BaseOAuth2TestCase):
             'client_id': self.get_client().client_id,
             'client_secret': self.get_client().client_secret,
             'code': code,
-            'scope': 'read write'})
+            'scope': 'feed'})
 
         self.assertEqual(400, response.status_code)
         self.assertEqual('invalid_scope', json.loads(response.content)['error'])
@@ -530,29 +530,29 @@ class ScopeTest(TestCase):
         constants.SCOPES = self._scopes
 
     def test_get_scope_names(self):
-        names = scope.to_names(constants.READ)
-        self.assertEqual('read', ' '.join(names))
+        names = scope.to_names(constants.OBJECTIVE)
+        self.assertEqual('objective', ' '.join(names))
 
-        names = scope.names(constants.READ_WRITE)
+        names = scope.names(constants.ALL)
         names.sort()
 
-        self.assertEqual('read read+write write', ' '.join(names))
+        self.assertEqual('all feed feedback network_post objective recognition', ' '.join(names))
 
     def test_get_scope_ints(self):
-        self.assertEqual(constants.READ, scope.to_int('read'))
-        self.assertEqual(constants.WRITE, scope.to_int('write'))
-        self.assertEqual(constants.READ_WRITE, scope.to_int('read', 'write'))
+        self.assertEqual(constants.OBJECTIVE, scope.to_int('objective'))
+        self.assertEqual(constants.FEED, scope.to_int('feed'))
+        self.assertEqual(constants.OBJECTIVE | constants.FEED, scope.to_int('objective', 'feed'))
         self.assertEqual(0, scope.to_int('invalid'))
         self.assertEqual(1, scope.to_int('invalid', default=1))
 
     def test_template_filter(self):
-        names = scopes(constants.READ)
-        self.assertEqual('read', ' '.join(names))
+        names = scopes(constants.OBJECTIVE)
+        self.assertEqual('objective', ' '.join(names))
 
-        names = scope.names(constants.READ_WRITE)
+        names = scope.names(constants.ALL)
         names.sort()
 
-        self.assertEqual('read read+write write', ' '.join(names))
+        self.assertEqual('all feed feedback network_post objective recognition', ' '.join(names))
 
 
 class DeleteExpiredTest(BaseOAuth2TestCase):

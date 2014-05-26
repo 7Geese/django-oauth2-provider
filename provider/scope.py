@@ -8,7 +8,7 @@ Scopes can be combined, such as ``"read write"``. Note that a single
 See :class:`provider.scope.to_int` on how scopes are combined.
 """
 
-from .constants import SCOPES
+from .constants import SCOPES, ALL
 
 SCOPE_NAMES = [(name, name) for (value, name) in SCOPES]
 SCOPE_NAME_DICT = dict([(name, value) for (value, name) in SCOPES])
