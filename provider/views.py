@@ -576,13 +576,13 @@ class AccessToken(OAuthView, Mixin):
                 'error': 'invalid_request',
                 'error_description': _("A secure connection is required.")})
 
-        if not 'grant_type' in request.POST:
+        if not 'grant_type' in request.REQUEST:
             return self.error_response({
                 'error': 'invalid_request',
                 'error_description': _("No 'grant_type' included in the "
                     "request.")})
 
-        grant_type = request.POST['grant_type']
+        grant_type = request.REQUEST['grant_type']
 
         if grant_type not in self.grant_types:
             return self.error_response({'error': 'unsupported_grant_type'})
