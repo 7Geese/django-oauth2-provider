@@ -496,7 +496,7 @@ class AccessToken(OAuthView, Mixin):
         Handle ``grant_type=authorization_code`` requests as defined in
         :rfc:`4.1.3`.
         """
-        grant = self.get_authorization_code_grant(request, request.POST,
+        grant = self.get_authorization_code_grant(request, request.REQUEST,
                 client)
         if constants.SINGLE_ACCESS_TOKEN:
             at = self.get_access_token(request, grant.user, grant.scope, client)
