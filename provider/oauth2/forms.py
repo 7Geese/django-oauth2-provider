@@ -224,13 +224,9 @@ class AuthorizationCodeGrantForm(ScopeModelMixin, OAuthForm):
         grant!
         """
         data = self.cleaned_data
-        want_scope = data.get('scope') or None
         grant = data.get('grant')
-        if want_scope and grant:
-            has_scope = {s.name for s in grant.scope.all()}
-            want_scope = {s.name for s in want_scope}
-            if want_scope.issubset(has_scope):
-                return data
+        if grant:
+            return data
         raise OAuthValidationError({'error': 'invalid_grant'})
 
 
