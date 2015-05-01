@@ -191,16 +191,9 @@ class RefreshTokenGrantForm(ScopeModelMixin, OAuthForm):
         """
         data = self.cleaned_data
 
-        want_scope = data.get('scope') or None
         refresh_token = data.get('refresh_token')
-        access_token = getattr(refresh_token, 'access_token', None) if \
-            refresh_token else \
-            None
-        if refresh_token and want_scope:
-            want_scope = {s.name for s in want_scope}
-            has_scope = {s.name for s in access_token.scope.all()}
-            if want_scope.issubset(has_scope):
-                return data
+        if refresh_token and getattr(refresh_token, 'access_token', None):
+            return data
         raise OAuthValidationError({'error': 'invalid_grant'})
 
 
@@ -231,13 +224,9 @@ class AuthorizationCodeGrantForm(ScopeModelMixin, OAuthForm):
         grant!
         """
         data = self.cleaned_data
-        want_scope = data.get('scope') or None
         grant = data.get('grant')
-        if want_scope and grant:
-            has_scope = {s.name for s in grant.scope.all()}
-            want_scope = {s.name for s in want_scope}
-            if want_scope.issubset(has_scope):
-                return data
+        if grant:
+            return data
         raise OAuthValidationError({'error': 'invalid_grant'})
 
 
