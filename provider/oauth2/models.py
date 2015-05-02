@@ -3,6 +3,7 @@ Default model implementations. Custom database or OAuth backends need to
 implement these models with fields and and methods to be compatible with the
 views in :attr:`provider.views`.
 """
+from django.core.exceptions import ValidationError
 
 from django.db import models
 from django.conf import settings
@@ -58,6 +59,19 @@ class Scope(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *a, **k):
+        """
+        We can't allow spaces in the scope name because the API allows passing
+        in scopes as a space-separated list.
+
+        I realise if you bulk create objects, they won't go through here. But
+        when do you ever bulk create scopes? This is merely trying to catch
+        future problems as early as possible.
+        """
+        if ' ' in self.name:
+            raise ValidationError('Scope names can not contain spaces.')
+        return super(Scope, self).save(*a, **k)
 
     class Meta:
         app_label = 'oauth2'

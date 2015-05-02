@@ -52,10 +52,14 @@ class ScopeModelChoiceField(forms.ModelMultipleChoiceField):
     # widget = forms.TextInput
 
     def to_python(self, value):
-        if isinstance(value, basestring):
-            return [s for s in value.split(' ') if s != '']
-        else:
-            return value
+        """
+        We allow providing scopes as a space-separated list. These will come in
+        here as a list with one element, which is the space-separated list. We
+        hence need to split it up here into a list of multiple scopes.
+        """
+        if isinstance(value, list):
+            value = ' '.join(value)
+        return [s for s in value.split(' ') if s != '']
 
     def clean(self, value):
         if self.required and not value:
