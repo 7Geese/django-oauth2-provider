@@ -7,7 +7,6 @@ from django.core.exceptions import ValidationError
 
 from django.db import models
 from django.conf import settings
-from provider import constants
 from provider.constants import CLIENT_TYPES
 from provider.utils import now, short_token, long_token, get_code_expiry
 from provider.utils import get_token_expiry
@@ -134,7 +133,7 @@ class Grant(models.Model):
     * :attr:`redirect_uri`
     * :attr:`scope`
     """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="oauth2_grant")
     client = models.ForeignKey(Client)
     code = models.CharField(max_length=255, default=long_token)
     expires = models.DateTimeField(default=get_code_expiry)
@@ -260,7 +259,7 @@ class RefreshToken(models.Model):
     * :attr:`client` - :class:`Client`
     * :attr:`expired` - ``boolean``
     """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="oauth2_refresh_token")
     token = models.CharField(max_length=255, default=long_token)
     access_token = models.OneToOneField(AccessToken,
             related_name='refresh_token')
