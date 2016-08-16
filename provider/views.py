@@ -511,8 +511,9 @@ class AccessTokenViewBase(AuthUtilMixin, TemplateView):
         Handle ``grant_type=authorization_code`` requests as defined in
         :rfc:`4.1.3`.
         """
-        grant = self.get_authorization_code_grant(request, request.REQUEST,
-                client)
+        request_data = request.GET.copy()
+        request_data.update(request.POST)
+        grant = self.get_authorization_code_grant(request, request_data, client)
         at = self.create_access_token(request, grant.user,
                                       list(grant.scope.all()), client)
         rt = self.create_refresh_token(request, grant.user,
@@ -590,13 +591,15 @@ class AccessTokenViewBase(AuthUtilMixin, TemplateView):
                 'error': 'invalid_request',
                 'error_description': _("A secure connection is required.")})
 
-        if not 'grant_type' in request.REQUEST:
+        request_data = request.GET.copy()
+        request_data.update(request.POST)
+        if not 'grant_type' in request_data:
             return self.error_response({
                 'error': 'invalid_request',
-                'error_description': _("No 'grant_type' included in the "
-                    "request.")})
+                'error_description': _("No 'grant_type' included in the request.")
+            })
 
-        grant_type = request.REQUEST['grant_type']
+        grant_type = request_data['grant_type']
 
         if grant_type not in self.grant_types:
             return self.error_response({'error': 'unsupported_grant_type'})
