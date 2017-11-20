@@ -613,5 +613,5 @@ class AccessTokenViewBase(AuthUtilMixin, TemplateView):
 
         try:
             return handler(request, request.POST, client)
-        except OAuthError, e:
+        except OAuthError as e:
             return self.error_response(e.args[0])
