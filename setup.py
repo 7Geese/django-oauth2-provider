@@ -24,6 +24,7 @@ setup(
     ],
     install_requires=[
         "shortuuid>=0.4",
+        'six',
     ],
     include_package_data=True,
     zip_safe=False,

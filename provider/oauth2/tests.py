@@ -1,20 +1,21 @@
-import json
-import urlparse
 import datetime
-from django.http import QueryDict
+import json
+
 from django.conf import settings
-from django.core.urlresolvers import reverse
-from django.utils.html import escape
-from django.test import TestCase
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.http import QueryDict
+from django.test import TestCase
+from django.utils.html import escape
+from six.moves.urllib.parse import parse_qs, urlparse
+
 from provider import constants, scope
 from provider.compat import skipIfCustomUser
+from provider.oauth2.backends import AccessTokenBackend, BasicClientBackend, RequestParamsClientBackend
+from provider.oauth2.forms import ClientForm
+from provider.oauth2.models import AccessToken, Client, Grant, RefreshToken
 from provider.templatetags.scope import scopes
 from provider.utils import now as date_now
-from provider.oauth2.forms import ClientForm
-from provider.oauth2.models import Client, Grant, AccessToken, RefreshToken
-from provider.oauth2.backends import BasicClientBackend, RequestParamsClientBackend
-from provider.oauth2.backends import AccessTokenBackend
 
 
 @skipIfCustomUser
@@ -73,7 +74,7 @@ class AuthorizationTest(BaseOAuth2TestCase):
 
         # Login redirect
         self.assertEqual(302, response.status_code)
-        self.assertEqual('/login/', urlparse.urlparse(response['Location']).path)
+        self.assertEqual('/login/', urlparse(response['Location']).path)
 
         self.login()
 
@@ -245,7 +246,7 @@ class AccessTokenTest(BaseOAuth2TestCase):
         self._login_and_authorize()
 
         response = self.client.get(self.redirect_url())
-        query = QueryDict(urlparse.urlparse(response['Location']).query)
+        query = QueryDict(urlparse(response['Location']).query)
         code = query['code']
 
         response = self.client.post(self.access_token_url(), {
@@ -272,7 +273,7 @@ class AccessTokenTest(BaseOAuth2TestCase):
         self._login_and_authorize()
         response = self.client.get(self.redirect_url())
 
-        query = QueryDict(urlparse.urlparse(response['Location']).query)
+        query = QueryDict(urlparse(response['Location']).query)
         code = query['code']
 
         response = self.client.post(self.access_token_url(), {
@@ -551,7 +552,7 @@ class DeleteExpiredTest(BaseOAuth2TestCase):
         self.assertTrue('code' in location)
 
         # verify that Grant with code exists
-        code = urlparse.parse_qs(location)['code'][0]
+        code = parse_qs(location)['code'][0]
         self.assertTrue(Grant.objects.filter(code=code).exists())
 
         # use the code/grant

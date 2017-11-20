@@ -1,12 +1,14 @@
 import json
-import urlparse
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect, QueryDict
+
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse, HttpResponseRedirect, QueryDict
 from django.utils.translation import ugettext as _
 from django.views.generic.base import TemplateView, View
-from django.core.exceptions import ObjectDoesNotExist
-from oauth2.models import Client, Scope
+from six.moves.urllib.parse import ParseResult, urlparse
+
 from provider import constants
+
+from .oauth2.models import Client
 
 
 class OAuthError(Exception):
@@ -335,7 +337,7 @@ class RedirectViewBase(AuthUtilMixin, View):
 
         redirect_uri = data.get('redirect_uri', None) or client.redirect_uri
 
-        parsed = urlparse.urlparse(redirect_uri)
+        parsed = urlparse(redirect_uri)
 
         query = QueryDict('', mutable=True)
 
@@ -351,7 +353,7 @@ class RedirectViewBase(AuthUtilMixin, View):
 
         parsed = parsed[:4] + (query.urlencode(), '')
 
-        redirect_uri = urlparse.ParseResult(*parsed).geturl()
+        redirect_uri = ParseResult(*parsed).geturl()
 
         self.clear_data(request)
 
