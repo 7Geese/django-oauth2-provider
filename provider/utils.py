@@ -1,9 +1,11 @@
 import hashlib
+
 import shortuuid
 from django.conf import settings
-from provider.constants import EXPIRE_DELTA, EXPIRE_DELTA_PUBLIC, EXPIRE_CODE_DELTA
-
 from django.utils import timezone
+from django.utils.encoding import force_bytes
+
+from provider.constants import EXPIRE_CODE_DELTA, EXPIRE_DELTA, EXPIRE_DELTA_PUBLIC
 
 
 def now():
@@ -14,8 +16,8 @@ def short_token():
     """
     Generate a hash that can be used as an application identifier
     """
-    hash = hashlib.sha1(shortuuid.uuid())
-    hash.update(settings.SECRET_KEY)
+    hash = hashlib.sha1(force_bytes(shortuuid.uuid()))
+    hash.update(force_bytes(settings.SECRET_KEY))
     return hash.hexdigest()[::2]
 
 
@@ -23,8 +25,8 @@ def long_token():
     """
     Generate a hash that can be used as an application secret
     """
-    hash = hashlib.sha1(shortuuid.uuid())
-    hash.update(settings.SECRET_KEY)
+    hash = hashlib.sha1(force_bytes(shortuuid.uuid()))
+    hash.update(force_bytes(settings.SECRET_KEY))
     return hash.hexdigest()
 
 
