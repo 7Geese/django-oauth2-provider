@@ -59,7 +59,7 @@ class AuthUtilMixin(object):
         """
         Clear all OAuth related data from the session store.
         """
-        for key in request.session.keys():
+        for key in list(request.session.keys()):
             if key.startswith(constants.SESSION_KEY):
                 del request.session[key]
 
