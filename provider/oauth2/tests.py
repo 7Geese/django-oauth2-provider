@@ -3,6 +3,7 @@ import json
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.auth.tests.utils import skipIfCustomUser
 from django.core.urlresolvers import reverse
 from django.http import QueryDict
 from django.test import TestCase
@@ -10,7 +11,6 @@ from django.utils.html import escape
 from six.moves.urllib.parse import parse_qs, urlparse
 
 from provider import constants, scope
-from provider.compat import skipIfCustomUser
 from provider.oauth2.backends import AccessTokenBackend, BasicClientBackend, RequestParamsClientBackend
 from provider.oauth2.forms import ClientForm
 from provider.oauth2.models import AccessToken, Client, Grant, RefreshToken
