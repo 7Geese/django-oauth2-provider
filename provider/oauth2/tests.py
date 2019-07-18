@@ -4,9 +4,9 @@ import json
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.tests.utils import skipIfCustomUser
-from django.core.urlresolvers import reverse
 from django.http import QueryDict
 from django.test import TestCase
+from django.urls import reverse
 from django.utils.html import escape
 from six.moves.urllib.parse import parse_qs, urlparse
 
