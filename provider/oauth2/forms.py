@@ -163,7 +163,7 @@ class AuthorizationForm(ScopeModelMixin, OAuthForm):
 
         grant = Grant(**kwargs)
         grant.save()
-        grant.scope = self.cleaned_data.get('scope')
+        grant.scope.set(self.cleaned_data.get('scope'))
         return grant
 
 
